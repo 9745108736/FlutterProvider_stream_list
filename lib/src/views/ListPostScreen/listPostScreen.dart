@@ -42,9 +42,10 @@ class _ListPostsScreenState extends State<ListPostsScreen>
           floatingActionButton: InkWell(
             onTap: () {
               FindUtils.sharePref.logout();
-              Navigator.pushReplacement(
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => LoginScreen()),
+                (Route<dynamic> route) => false,
               );
             },
             child: Icon(Icons.logout),
@@ -55,8 +56,9 @@ class _ListPostsScreenState extends State<ListPostsScreen>
   @override
   void initState() {
     super.initState();
+
     SystemChannels.textInput.invokeMethod('TextInput.hide');
-    _checkToken();
+
     _listPostController.pageNumber = 1;
     _listPostController.scrollController = new ScrollController();
     _listPostController.scrollController.addListener(() {
@@ -72,18 +74,7 @@ class _ListPostsScreenState extends State<ListPostsScreen>
   void dispose() {
     super.dispose();
     _listPostController.scrollController.dispose();
-  }
-
-  _checkToken() async {
-    var token = await FindUtils.sharePref.getTokenOnly();
-    print("token - $token");
-    if (token == null) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-        (Route<dynamic> route) => false,
-      );
-    }
+    _listPostController.provider.dispose();
   }
 
   // ListPostModel listPostModel;
@@ -126,24 +117,24 @@ class _ListPostsScreenState extends State<ListPostsScreen>
 
   Widget _body() {
     return Center(
-      child: Card(
-        child: Container(
-          color: MyColors.white.redC,
-          height: MediaQuery.of(context).size.height + 10,
-          width: MediaQuery.of(context).size.width - 30,
-          child: _listPostController.showLoading == true
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: RoundedLoadingButtonWidget(
-                        color: MyColors.btnGreenColor.redC,
-                      ),
-                    ),
-                  ],
-                )
-              : ListView.builder(
+      child: _listPostController.showLoading == true
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: RoundedLoadingButtonWidget(
+                    color: MyColors.btnGreenColor.redC,
+                  ),
+                ),
+              ],
+            )
+          : Card(
+              child: Container(
+                color: MyColors.white.redC,
+                height: MediaQuery.of(context).size.height + 10,
+                width: MediaQuery.of(context).size.width - 30,
+                child: ListView.builder(
                   controller: _listPostController.scrollController,
                   itemBuilder: (context, index) {
                     return singlePostWidget(
@@ -161,8 +152,8 @@ class _ListPostsScreenState extends State<ListPostsScreen>
                   },
                   itemCount: _listPostController.postList.length,
                 ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 }

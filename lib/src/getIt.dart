@@ -9,9 +9,11 @@ import 'constents/img.dart';
 GetIt getIt = GetIt.instance;
 
 void setup() {
-  getIt.registerSingleton<Mystyles>(Mystyles()); //common styles
+  // getIt.registerSingleton<Mystyles>(Mystyles()); //common styles
+  getIt.registerFactory(() => Mystyles()); //shared preference
   getIt.registerFactory(() => SharedPrefUtils()); //shared preference
   getIt.registerFactory(() => LoginProvider()); //login provider
   getIt.registerFactory(() => PostsProvider()); //post provider
-  getIt.registerSingleton<Img>(Img());
+  getIt.registerFactory(() => Img()); //post provider
+  // getIt.registerSingleton<Img>(Img());
 }

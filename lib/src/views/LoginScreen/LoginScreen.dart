@@ -34,8 +34,14 @@ class _LoginScreenState extends State<LoginScreen> with AfterLayoutMixin {
   void initState() {
     super.initState();
     //added default numbers
-    // _loginController.phoneTC.text = "+971501977439";
-    // _loginController.passwordTC.text = "1132456";
+    _loginController.phoneTC.text = "+971501977439";
+    _loginController.passwordTC.text = "1132456";
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _loginController.provider.dispose();
   }
 
   @override
@@ -102,110 +108,120 @@ class _LoginScreenState extends State<LoginScreen> with AfterLayoutMixin {
 
   Widget _body() {
     return Center(
-      child: Card(
-        child: Container(
-          color: MyColors.white.redC,
-          height: MediaQuery.of(context).size.height - 100,
-          width: MediaQuery.of(context).size.width - 30,
-          padding: EdgeInsets.all(30),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                spaceHeightWidget(
-                    sizeParam: MediaQuery.of(context).size.width / 3),
-                Row(
-                  children: [
-                    AutoSizeText(
-                      L.logintoAccountStr,
-                      style: FindUtils.MyStyles.styleBold(fontSize: 20),
-                      maxLines: 2,
-                      wrapWords: true,
-                    ),
-                  ],
-                ),
-                spaceHeightWidget(sizeParam: 30),
-                MyTextFiled(
-                  label: L.userNamePhoneStr,
-                  hintTextStyle: FindUtils.MyStyles.styleLight(fontSize: 16),
-                  textStyle: TextStyle(color: MyColors.black.redC),
-                  errorText: _loginController.phoneErrTxt,
-                  nextFocusNode: _loginController.passwordFocusNode,
-                  textInputType: TextInputType.emailAddress,
-                  textEditingController: _loginController.phoneTC,
-                  focusNode: _loginController.usernameFocusNode,
-                  underLineColor: MyColors.underLineColor.redC,
-                ),
-                spaceHeightWidget(sizeParam: 20),
-                MyTextFiled(
-                  label: L.passwordStr,
-                  hintTextStyle: FindUtils.MyStyles.styleLight(fontSize: 16),
-                  textStyle: TextStyle(color: MyColors.black.redC),
-                  errorText: _loginController.phoneErrTxt,
-                  textInputType: TextInputType.visiblePassword,
-                  textEditingController: _loginController.passwordTC,
-                  focusNode: _loginController.passwordFocusNode,
-                  underLineColor: MyColors.underLineColor.redC,
-                ),
-                spaceHeightWidget(sizeParam: 20),
-                Text(
-                  _loginController.loginErrorMessage,
-                  style: FindUtils.MyStyles.styleNormal(
-                      fontSize: 16, fontColor: MyColors.red.redC),
-                ),
-                spaceHeightWidget(sizeParam: 20),
-                ButtonTheme(
-                  height: 48,
-                  minWidth: MediaQuery.of(context).size.width,
-                  child: RaisedButton(
-                    onPressed: () {
-                      validate();
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(10.0),
-                        side: BorderSide(color: MyColors.underLineColor.redC)),
-                    color: MyColors.btnGreenColor.redC,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: _loginController.showLoading
-                          ? RoundedLoadingButtonWidget(
-                              color: MyColors.white.redC)
-                          : Text(
-                              L.loginStr,
-                              style: FindUtils.MyStyles.styleLight(
-                                  fontSize: 16, fontColor: MyColors.white.redC),
-                            ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 30),
+        child: Card(
+          child: Container(
+            color: MyColors.white.redC,
+            height: MediaQuery.of(context).size.height - 90,
+            width: MediaQuery.of(context).size.width - 50,
+            padding: EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  spaceHeightWidget(
+                      sizeParam: MediaQuery.of(context).size.width / 3),
+                  Row(
+                    children: [
+                      AutoSizeText(
+                        L.logintoAccountStr,
+                        style: FindUtils.MyStyles.styleBold(fontSize: 22),
+                        maxLines: 2,
+                        wrapWords: true,
+                      ),
+                    ],
+                  ),
+                  spaceHeightWidget(sizeParam: 30),
+                  MyTextFiled(
+                    label: L.userNamePhoneStr,
+                    hintTextStyle: FindUtils.MyStyles.styleLight(fontSize: 16),
+                    textStyle: TextStyle(color: MyColors.black.redC),
+                    errorText: _loginController.phoneErrTxt,
+                    nextFocusNode: _loginController.passwordFocusNode,
+                    textInputType: TextInputType.emailAddress,
+                    textEditingController: _loginController.phoneTC,
+                    focusNode: _loginController.usernameFocusNode,
+                    underLineColor: MyColors.underLineColor.redC,
+                  ),
+                  spaceHeightWidget(sizeParam: 20),
+                  MyTextFiled(
+                    label: L.passwordStr,
+                    obscureText: true,
+                    hintTextStyle: FindUtils.MyStyles.styleLight(fontSize: 16),
+                    textStyle: TextStyle(color: MyColors.black.redC),
+                    errorText: _loginController.phoneErrTxt,
+                    textInputType: TextInputType.visiblePassword,
+                    textEditingController: _loginController.passwordTC,
+                    focusNode: _loginController.passwordFocusNode,
+                    underLineColor: MyColors.underLineColor.redC,
+                  ),
+                  spaceHeightWidget(sizeParam: 20),
+                  _loginController.loginErrorMessage == ""
+                      ? Container()
+                      : Text(
+                          _loginController.loginErrorMessage,
+                          style: FindUtils.MyStyles.styleNormal(
+                              fontSize: 16, fontColor: MyColors.red.redC),
+                        ),
+                  spaceHeightWidget(sizeParam: 20),
+                  AbsorbPointer(
+                    absorbing: _loginController.showLoading,
+                    child: ButtonTheme(
+                      height: 48,
+                      minWidth: MediaQuery.of(context).size.width,
+                      child: RaisedButton(
+                        onPressed: () {
+                          validate();
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(10.0),
+                            side: BorderSide(
+                                color: MyColors.underLineColor.redC)),
+                        color: MyColors.btnGreenColor.redC,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: _loginController.showLoading
+                              ? RoundedLoadingButtonWidget(
+                                  color: MyColors.white.redC)
+                              : Text(
+                                  L.loginStr,
+                                  style: FindUtils.MyStyles.styleLight(
+                                      fontSize: 16,
+                                      fontColor: MyColors.white.redC),
+                                ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                spaceHeightWidget(sizeParam: 20),
-                Text(
-                  L.forgetStr,
-                  style: FindUtils.MyStyles.styleBold(
-                      fontSize: 16, fontColor: MyColors.btnGreenColor.redC),
-                ),
-                spaceHeightWidget(
-                    sizeParam: MediaQuery.of(context).size.width / 7),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: RichText(
-                    text: TextSpan(
-                        text: L.dontaccountStr,
-                        children: [
-                          TextSpan(
-                              text: L.registerStr,
-                              style: FindUtils.MyStyles.styleBold(
-                                  fontSize: 18,
-                                  fontColor: MyColors.btnGreenColor.redC)),
-                        ],
-                        style: FindUtils.MyStyles.styleNormal(
-                            fontSize: 17, fontColor: MyColors.black.redC)),
-                    textAlign: TextAlign.center,
+                  spaceHeightWidget(sizeParam: 20),
+                  Text(
+                    L.forgetStr,
+                    style: FindUtils.MyStyles.styleBold(
+                        fontSize: 16, fontColor: MyColors.btnGreenColor.redC),
                   ),
-                ),
-                spaceHeightWidget(sizeParam: 30)
-              ],
+                  spaceHeightWidget(
+                      sizeParam: MediaQuery.of(context).size.width / 7),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: RichText(
+                      text: TextSpan(
+                          text: L.dontaccountStr,
+                          children: [
+                            TextSpan(
+                                text: L.registerStr,
+                                style: FindUtils.MyStyles.styleBold(
+                                    fontSize: 18,
+                                    fontColor: MyColors.btnGreenColor.redC)),
+                          ],
+                          style: FindUtils.MyStyles.styleNormal(
+                              fontSize: 17, fontColor: MyColors.black.redC)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
