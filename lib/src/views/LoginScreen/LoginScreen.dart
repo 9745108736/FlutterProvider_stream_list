@@ -73,9 +73,10 @@ class _LoginScreenState extends State<LoginScreen> with AfterLayoutMixin {
 
   void homeNavigate() {
     //navigate to home
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => ListPostsScreen()),
+      (Route<dynamic> route) => false,
     );
   }
 
