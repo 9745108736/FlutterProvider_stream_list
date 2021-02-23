@@ -33,9 +33,9 @@ class _LoginScreenState extends State<LoginScreen> with AfterLayoutMixin {
   @override
   void initState() {
     super.initState();
-    //added default numbers
-    _loginController.phoneTC.text = "+971501977439";
-    _loginController.passwordTC.text = "1132456";
+    //added default credentials
+    // _loginController.phoneTC.text = "+971501977439";
+    // _loginController.passwordTC.text = "1132456";
   }
 
   @override
@@ -87,11 +87,12 @@ class _LoginScreenState extends State<LoginScreen> with AfterLayoutMixin {
 
   validate() {
     //method to validate and call the login method
+    _loginController.loginErrorMessage = "";
     _loginController.passwordErrTxt = null;
     _loginController.phoneErrTxt = null;
-    if (_loginController.phoneTC.text.isEmpty) {
+    if (_loginController.phoneTC.text.trim().isEmpty) {
       _loginController.phoneErrTxt = L.enterValidphoneStr;
-    } else if (_loginController.passwordTC.text.isEmpty) {
+    } else if (_loginController.passwordTC.text.trim().isEmpty) {
       _loginController.passwordErrTxt = L.enterValidPAssStr;
     } else {
       LoadingManege(manageLoading: true);
