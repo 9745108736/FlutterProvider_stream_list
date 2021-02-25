@@ -292,8 +292,8 @@ Widget singlePostWidget(
                       height: 350,
                       child: VideoItems(
                         videoPlayerController: VideoPlayerController.network(
-                          // data?.video,
-                          "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
+                          data?.video,
+                          // "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
                         ),
                         looping: true,
                         autoplay: false,

@@ -8,8 +8,7 @@ import 'package:tp_connects/src/models/helper/LoginHelper.dart';
 
 class LoginProvider extends ChangeNotifier {
   final _helper = LoginHelper();//login helper
-  final _streamController =
-      StreamController<Either<Glitch, LoginResponseModel>>(); //login method stream controller,
+  final _streamController = StreamController<Either<Glitch, LoginResponseModel>>(); //login method stream controller,
 
   Stream<Either<Glitch, LoginResponseModel>> get loginResStream {
     return _streamController.stream;
